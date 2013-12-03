@@ -14,6 +14,10 @@ It is a CMS created with Slim Framework that doesn't use Database to store the c
 1. Get or download the project
 2. Install it using Composer
 
+Also you can download the different versions from:
+[https://github.com/revuls/SlimCMS/releases](https://github.com/revuls/SlimCMS/releases)
+Then Upload the files to your server.
+
 2 Folder System
 -------------
 * admin/
@@ -105,7 +109,8 @@ Here we have the images, videos, etc... To be accesible when creating the conten
 
 2.2 admin/
 ----------
-Simple and easy to use admin tool
+Simple and easy to use admin tool.
+To add content to the site go to: http://your_url/admin
 
 Default Login that can be changed in the config
 
@@ -207,3 +212,10 @@ $app->get('/blog/:slug', function ($slug) use ($app) {
 });
 
 ```
+
+3 How to Contribute
+-------------------
+
+1. Fork the SlimCMS repository
+2. Create a new branch for each feature or improvement
+3. Send a pull request from each feature branch to the develop branch
