@@ -45,7 +45,7 @@ $authenticate = function ($app) {
 // Admin
 $app->get('/admin/', function () use ($app) {
     $twig_vars = $app->config('twigVars');
-    $app->config(array('templates.path' => 'admin/'));
+    $app->view->setTemplatesDirectory("admin/");
     $app->render('admin.html', $twig_vars);
 });
 
@@ -79,7 +79,7 @@ $app->get('/admin/pages', $authenticate($app), function () use ($app) {
     $twig_vars = $app->config('twigVars');
     $templates = lib\SlimCMS::getTemplates($app->config('templates.path'));
     $twig_vars['templates'] = $templates;
-    $app->config(array('templates.path' => 'admin/'));
+    $app->view->setTemplatesDirectory("admin/");
     $app->render('pages.html', $twig_vars);
 });
 
@@ -90,7 +90,7 @@ $app->get('/admin/pages/:slug', function ($slug) use ($app) {
     $twig_vars['templates'] = lib\SlimCMS::getTemplates($app->config('templates.path'));
     $twig_vars['page'] = $pages[$slug];
     if (isset($pages[$slug])) {
-        $app->config(array('templates.path' => 'admin/'));
+        $app->view->setTemplatesDirectory("admin/");
         $app->render('pages.html', $twig_vars);
     } else {
         $app->notFound();
@@ -100,7 +100,7 @@ $app->get('/admin/pages/:slug', function ($slug) use ($app) {
 // Admin Blog
 $app->get('/admin/blog', $authenticate($app), function () use ($app) {
     $twig_vars = $app->config('twigVars');
-    $app->config(array('templates.path' => 'admin/'));
+    $app->view->setTemplatesDirectory("admin/");
     $app->render('blog.html', $twig_vars);
 });
 
@@ -110,7 +110,7 @@ $app->get('/admin/blog/:slug', function ($slug) use ($app) {
     $posts = $twig_vars['blog'];
     $twig_vars['post'] = $posts[$slug];
     if (isset($posts[$slug])) {
-        $app->config(array('templates.path' => 'admin/'));
+        $app->view->setTemplatesDirectory("admin/");
         $app->render('blog.html', $twig_vars);
     } else {
         $app->notFound();
@@ -120,7 +120,7 @@ $app->get('/admin/blog/:slug', function ($slug) use ($app) {
 // Admin Menus
 $app->get('/admin/menus', $authenticate($app), function () use ($app) {
     $twig_vars = $app->config('twigVars');
-    $app->config(array('templates.path' => 'admin/'));
+    $app->view->setTemplatesDirectory("admin/");
     $app->render('menus.html', $twig_vars);
 });
 
@@ -131,7 +131,7 @@ $app->get('/admin/menus/:slug', function ($slug) use ($app) {
     $twig_vars['menu'] = $menus[$slug];
     $twig_vars['menuName'] = $slug;
     if (isset($menus[$slug])) {
-        $app->config(array('templates.path' => 'admin/'));
+        $app->view->setTemplatesDirectory("admin/");
         $app->render('menus.html', $twig_vars);
     } else {
         $app->notFound();
@@ -141,7 +141,7 @@ $app->get('/admin/menus/:slug', function ($slug) use ($app) {
 // Admin Config
 $app->get('/admin/config', $authenticate($app), function () use ($app) {
     $twig_vars = $app->config('twigVars');
-    $app->config(array('templates.path' => 'admin/'));
+    $app->view->setTemplatesDirectory("admin/");
     $app->render('config.html', $twig_vars);
 });
 
@@ -152,7 +152,7 @@ $app->get('/admin/media', $authenticate($app), function () use ($app) {
     $media = lib\SlimCMS::getMedia($config['url']);
     $twig_vars['media'] = $media;
 
-    $app->config(array('templates.path' => 'admin/'));
+    $app->view->setTemplatesDirectory("admin/");
     $app->render('media.html', $twig_vars);
 });
 
