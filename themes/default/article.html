@@ -1,0 +1,10 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+    <h1>{{page.Title}}</h1>
+    <p class="lead">
+        by <a href="">{{page.Author}}</a><span class="glyphicon glyphicon-time"></span> Posted on {{page.Date}}
+    </p>
+    <hr>
+    {{page.Content}}
+{% endblock %}

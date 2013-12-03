@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SlimCMS Admin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{config.url}}/admin/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="{{config.url}}/admin/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">SlimCMS</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{config.url}}/admin/pages">Pages</a></li>
+                <li class="active"><a href="{{config.url}}/admin/blog">Blog</a></li>
+                <li><a href="{{config.url}}/admin/menus">Menus</a></li>
+                <li><a href="{{config.url}}/admin/media">Media</a></li>
+                <li><a href="{{config.url}}/admin/config">Config</a></li>
+            </ul>
+            <p class="navbar-text navbar-right">Signed in as Admin - <a href="{{config.url}}/admin/logout" class="navbar-link">Logout</a></p>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container -->
+</nav>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-4">
+            <ul class="list-group">
+                {% for post in blog %}
+                <li class="list-group-item">
+                    <a href="{{config.url}}/blog/{{post.Slug|e}}">{{post.Title}}</a>
+                    <button id="del-{{post.DateTime}}_{{post.Slug}}" data-slug="{{post.DateTime}}_{{post.Slug}}" type="button" class="btn btn-danger btn-xs delete" title="Delete" style="float: right;">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                    <button id="edit-{{post.DateTime}}_{{post.Slug}}" data-slug="{{post.Slug}}" type="button" class="btn btn-primary btn-xs edit" title="Edit" style="float: right; margin-right: 10px;">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-lg-8">
+
+            <form class="" onsubmit="return false;">
+                <input id="inputTitle" class="form-control input-lg" type="text" placeholder="Title" value="{{post.Title}}" />
+                <br/>
+                <input id="inputSlug" class="form-control input-lg" type="text" placeholder="Slug" value="{{post.Slug}}" />
+                <br/>
+                <textarea name="inputDescription" id="inputDescription" class="form-control input-lg" placeholder="Description" rows="3">{{post.Description}}</textarea>
+                <br/>
+                <input id="inputTag" class="form-control input-lg" type="text" placeholder="Tags" value="{{post.Tag}}" />
+                <br/>
+
+                <textarea class="editor">{{post.Content}}</textarea>
+                <br/><br/>
+
+                <button id="btnSave" type="button" class="btn btn-primary btn-lg btn-block">Save</button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div><!-- /.container -->
+
+<!-- Bootstrap core JavaScript -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!-- Make sure to add jQuery - download the most recent version at http://jquery.com/ -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="{{config.url}}/admin/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="{{config.url}}/admin/ckeditor/adapters/jquery.js"></script>
+<script src="{{config.url}}/admin/js/Util.js"></script>
+<script src="{{config.url}}/admin/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $( 'textarea.editor' ).ckeditor({
+            "extraPlugins": "imagebrowser",
+            "imageBrowser_listUrl": "{{config.url}}/api/media"
+        });
+
+        $("#inputTitle").on("focusout", function(){
+            $("#inputSlug").val(Util.makeSlug($("#inputTitle").val()));
+        });
+
+        $("#btnSave").on("click", function() {
+            var theData = {
+                "Slug": $("#inputSlug").val(),
+                "Title": $("#inputTitle").val(),
+                "Author": "Cesar Redondo",
+                "Date": Util.GetActualDate(),
+                "Tag": $("#inputTag").val(),
+                "Category": "General",
+                "Description": $("#inputDescription").val(),
+                "Content": $(".editor").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "{{config.url}}/api/blog",
+                //dataType: "JSON",
+                data: theData,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown.message);
+                },
+                success: function(msg) {
+                    window.location.reload(true);
+                }
+            });
+        });
+
+        $(".delete").on("click", function(){
+            var slug = $(this).data("slug");
+            $.ajax({
+                type: "DELETE",
+                url: "{{config.url}}/api/blog/"+slug,
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown.message);
+                },
+                success: function(msg) {
+                    window.location = "{{config.url}}/admin/blog";
+                }
+            });
+        });
+
+        $(".edit").on("click", function(){
+            window.location = "{{config.url}}/admin/blog/" + $(this).data("slug");
+        });
+    });
+</script>
+</body>
+</html>

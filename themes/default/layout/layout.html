@@ -1,0 +1,68 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    {% block head %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{page.Title}}</title>
+    <link rel="stylesheet" href="{{config.url}}/themes/{{config.theme}}/css/normalize.css" />
+    <link rel="stylesheet" href="{{config.url}}/themes/{{config.theme}}/css/foundation.min.css" />
+    <script src="{{config.url}}/themes/{{config.theme}}/js/modernizr.js"></script>
+    {% endblock %}
+</head>
+<body>
+
+<!-- Nav and Banner -->
+
+<div class="row">
+    <div class="large-12 columns">
+        <div class="nav-bar right">
+            <ul class="button-group">
+                {% for title,url in menus.menu %}
+                <li><a href="{{url}}" class="button">{{title}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <h1><a href="{{config.url}}">{{config.title}}</a></h1>
+        <hr>
+    </div>
+</div>
+
+<!-- End Nav and Banner -->
+
+
+<!-- Main Content Section -->
+
+<div class="row">
+    <div class="large-12 columns">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+<!-- Footer -->
+
+<footer class="row">
+    <div class="large-12 columns">
+        <hr />
+        <div class="row">
+            <div class="large-6 columns">
+                <p>© Copyright {{config.title}}.</p>
+            </div>
+            <div class="large-6 columns">
+                <ul class="inline-list right">
+                    {% for title,url in menus.menu %}
+                    <li><a href="{{url}}">{{title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{{config.url}}/themes/{{config.theme}}/js/jquery.js"></script>
+<script src="{{config.url}}/themes/{{config.theme}}/js/foundation.min.js"></script>
+<script>
+    $(document).foundation();
+</script>
+</body>
+</html>

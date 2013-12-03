@@ -1,0 +1,11 @@
+body {
+    margin: 100px 0; /* 100px is double the height of the navbar - I made it a big larger for some more space - keep it at 50px at least if you want to use the fixed top nav */
+}
+
+footer {
+    margin: 50px 0;
+}
+
+.item {
+    margin-bottom: 30px;
+}

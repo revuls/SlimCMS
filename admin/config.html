@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SlimCMS Admin</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{config.url}}/admin/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Add custom CSS here -->
+    <link href="{{config.url}}/admin/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">SlimCMS</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{config.url}}/admin/pages">Pages</a></li>
+                <li><a href="{{config.url}}/admin/blog">Blog</a></li>
+                <li><a href="{{config.url}}/admin/menus">Menus</a></li>
+                <li><a href="{{config.url}}/admin/media">Media</a></li>
+                <li class="active"><a href="{{config.url}}/admin/config">Config</a></li>
+            </ul>
+
+            <p class="navbar-text navbar-right">Signed in as Admin - <a href="{{config.url}}/admin/logout" class="navbar-link">Logout</a></p>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container -->
+</nav>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-4">
+        </div>
+        <div class="col-lg-8">
+            <form class="" onsubmit="return false;">
+                <input id="inputTitle" class="form-control input-lg" type="text" placeholder="Title" value="{{config.title}}" />
+                <br/>
+                <textarea name="" id="inputDescription" rows="5" class="form-control input-lg" placeholder="Description">{{config.description}}</textarea>
+                <br/>
+                <input id="inputUrl" class="form-control input-lg" type="text" placeholder="Url: http://" value="{{config.url}}" />
+                <br/>
+                <select name="" id="selectTheme" class="form-control input-lg">
+                    <option value="{{page.Template}}">Select a Theme</option>
+                    {% for theme in themes %}
+                    <option value="{{theme}}" {{ config.theme == theme ? 'selected' }}>{{theme}}</option>
+                    {% endfor %}
+                </select>
+                <br/>
+                <input id="inputUser" class="form-control input-lg" type="text" placeholder="User" value="{{config.user}}" />
+                <br/>
+                <input id="inputPassword" class="form-control input-lg" type="password" placeholder="Password" />
+                <br/>
+                <input id="inputRepeat" class="form-control input-lg" type="password" placeholder="Repeat Password" />
+                <br/>
+                <button id="btnSave" type="button" class="btn btn-success btn-lg btn-block">Save</button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div><!-- /.container -->
+
+<!-- Bootstrap core JavaScript -->
+<!-- Placed at the end of the document so the pages load faster -->
+<!-- Make sure to add jQuery - download the most recent version at http://jquery.com/ -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="{{config.url}}/admin/js/Util.js"></script>
+<script src="{{config.url}}/admin/js/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#btnSave").on("click", function() {
+            if ($("#inputPassword").val() == $("#inputRepeat").val()) {
+                var theData = {
+                    "title": $("#inputTitle").val(),
+                    "description": $("#inputDescription").val(),
+                    "user": $("#inputUser").val(),
+                    "password": $("#inputPassword").val(),
+                    "theme": $("#selectTheme").val(),
+                    "url": $("#inputUrl").val()
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{config.url}}/api/config",
+                    data: theData,
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown.message);
+                    },
+                    success: function(msg) {
+                        window.location.reload(true);
+                    }
+                });
+            } else {
+                alert("Password is not correct");
+            }
+        });
+    });
+</script>
+</body>
+</html>

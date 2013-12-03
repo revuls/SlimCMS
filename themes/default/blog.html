@@ -1,0 +1,11 @@
+{% extends "layout/layout.html" %}
+
+{% block content %}
+    {% for post in blog %}
+        <div>
+            <h3><a href="{{config.url}}/blog/{{post.Slug}}">{{post.Title}}</a> <small>{{post.Date}}</small></h3>
+            {{ post.Content}}
+            <hr/>
+        </div>
+    {% endfor %}
+{% endblock %}
